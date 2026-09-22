@@ -1,0 +1,12 @@
+_base_: ../default.yaml
+
+experiment_name: gated_attention_resnet50
+
+model:
+  name: gated_attention
+  in_dim: 2048
+  attention_hidden: 256
+  attention_bias: false
+  mlp_hidden: 256
+  dropout: 0.5
+  n_outputs: 1

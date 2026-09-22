@@ -1,0 +1,11 @@
+name: vit_b16_in21k
+source: timm
+timm_name: vit_base_patch16_224.augreg_in21k
+feature_dim: 768
+input_size: 224                 # 512 px tiles are resized to the ViT input resolution
+frozen: true
+normalize:
+  mean: [0.5, 0.5, 0.5]
+  std: [0.5, 0.5, 0.5]
+batch_size: 128
+gradcam_layer: null

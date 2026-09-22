@@ -1,0 +1,7 @@
+_base_: ../models/gated_attention.yaml
+
+# "- Gated attention (use mean pooling)"
+experiment_name: ablation_no_gated_attention
+
+model:
+  name: mean_pool

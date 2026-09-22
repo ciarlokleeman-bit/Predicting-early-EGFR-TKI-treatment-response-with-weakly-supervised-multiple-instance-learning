@@ -1,0 +1,21 @@
+# Macenko stain normalisation. The reference is taken from the slide whose
+# median optical-density intensity sits at the cohort median.
+
+tiles_in: data/tiles
+tiles_out: data/tiles_norm
+stain_reference: data/stain_reference.npz
+
+reference_selection:
+  tiles_per_slide: 200          # random tiles used to estimate each slide's staining intensity
+  statistic: median_od          # cohort-median slide of this statistic becomes the reference
+  seed: 42
+
+macenko:
+  luminosity_threshold: 0.8     # ignore near-white pixels when fitting stain vectors
+  beta: 0.15                    # optical-density threshold for transparent pixels
+  alpha: 1.0                    # percentile used for the extreme stain angles
+  Io: 240
+  max_concentration_percentile: 99
+
+num_workers: 8
+overwrite: false

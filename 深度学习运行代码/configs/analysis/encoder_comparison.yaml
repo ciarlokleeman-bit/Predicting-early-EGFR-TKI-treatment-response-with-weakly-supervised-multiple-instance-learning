@@ -1,0 +1,13 @@
+# Backbone comparison with the same gated-attention head.
+
+reference_run: runs/gated_attention_resnet50
+comparison_runs:
+  densenet121: runs/gated_attention_densenet121
+  efficientnet_b3: runs/gated_attention_efficientnet_b3
+  vit_b16_in21k: runs/gated_attention_vit_b16_in21k
+  uni: runs/gated_attention_uni
+
+fold_test: wilcoxon_exact
+multiple_comparison: holm
+pooled_sensitivity_test: delong
+output: results/encoder_comparison.csv

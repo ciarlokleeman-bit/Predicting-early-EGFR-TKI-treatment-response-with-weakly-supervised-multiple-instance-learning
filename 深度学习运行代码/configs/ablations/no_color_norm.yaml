@@ -1,0 +1,10 @@
+_base_: ../models/gated_attention.yaml
+
+# "- Color normalization": features extracted from un-normalised tiles
+experiment_name: ablation_no_color_norm
+
+paths:
+  tiles: data/tiles
+
+data:
+  encoder: resnet50_raw           # feature cache built from data/tiles instead of data/tiles_norm

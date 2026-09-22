@@ -1,0 +1,18 @@
+_base_: ../default.yaml
+
+experiment_name: clam_sb_resnet50
+
+# CLAM single-branch (Lu et al., Nat Biomed Eng 2021) on the same frozen
+# ResNet-50 embeddings: 2048 -> 512 projection, gated attention, instance
+# clustering loss on the k highest / lowest attention patches.
+model:
+  name: clam_sb
+  in_dim: 2048
+  embed_dim: 512
+  attention_hidden: 256
+  dropout: 0.25
+  k_sample: 8
+  instance_loss: ce               # ce | svm  (smooth top-1 SVM)
+  bag_weight: 0.7
+  subtyping: false
+  n_outputs: 1

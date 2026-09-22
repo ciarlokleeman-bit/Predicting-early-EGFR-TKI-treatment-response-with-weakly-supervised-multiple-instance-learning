@@ -1,0 +1,7 @@
+_base_: ../models/gated_attention.yaml
+
+# "- Class-weight balancing": plain binary cross-entropy
+experiment_name: ablation_no_class_weight
+
+training:
+  class_weighting: false

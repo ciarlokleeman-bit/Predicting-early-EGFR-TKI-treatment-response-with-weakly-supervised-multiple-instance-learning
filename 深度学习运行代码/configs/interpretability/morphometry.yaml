@@ -1,0 +1,30 @@
+# HoVer-Net nuclear morphometry on the ten highest-attention patches of each
+# patient. Features are averaged to one value per patient before testing.
+
+run_dir: runs/gated_attention_resnet50
+tiles: data/tiles_norm
+output_dir: results/morphometry
+
+top_k_patches: 10
+mpp: 0.5
+
+hovernet:
+  backend: tiatoolbox
+  pretrained_model: hovernet_fast-pannuke
+  batch_size: 8
+  num_loader_workers: 4
+  num_postproc_workers: 4
+  on_gpu: true
+  cache_dir: results/morphometry/hovernet_cache
+
+features:
+  min_nucleus_area_px: 20
+  cytoplasm_expansion_um: 4.0       # radius used to approximate the cell region for the N/C ratio
+  chromatin_channel: hematoxylin    # colour-deconvolved hematoxylin optical density
+  entropy_bins: 256
+  exclude_types: []                 # PanNuke type ids to drop (e.g. inflammatory = 2)
+
+statistics:
+  group_test: mann_whitney
+  score_correlation: pearson
+  score_source: oof_predictions.csv

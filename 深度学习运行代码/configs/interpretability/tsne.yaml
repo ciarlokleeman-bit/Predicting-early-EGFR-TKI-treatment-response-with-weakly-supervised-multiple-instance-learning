@@ -1,0 +1,13 @@
+# t-SNE of slide-level representations z from the outer test folds.
+
+run_dir: runs/gated_attention_resnet50
+output: results/embeddings/tsne_slide_representations.csv
+
+tsne:
+  n_components: 2
+  perplexity: 30
+  learning_rate: auto
+  init: pca
+  n_iter: 1000
+  metric: euclidean
+seed: 42

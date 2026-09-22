@@ -1,0 +1,33 @@
+# Subgroup AUCs and label-sensitivity analyses on the out-of-fold scores.
+
+manifest: data/manifests/cohort.csv
+oof_predictions: runs/gated_attention_resnet50/oof_predictions.csv
+output_dir: results/subgroups
+
+subgroups:
+  - name: exon19_deletion
+    column: egfr_subtype
+    value: exon19del
+  - name: l858r
+    column: egfr_subtype
+    value: L858R
+  - name: first_generation_tki
+    column: tki_generation
+    value: first
+  - name: osimertinib
+    column: tki_generation
+    value: third
+
+label_sensitivity:
+  - name: pd_only
+    scheme: pd_only                 # PD versus every other RECIST category
+  - name: pd_plus_sd
+    scheme: pd_plus_sd              # PD plus all SD versus CR / PR
+
+retrained_runs:                     # optional CV runs re-trained on the alternative target
+  pd_only: runs/gated_attention_resnet50_pd_only
+  pd_plus_sd: runs/gated_attention_resnet50_pd_plus_sd
+
+bootstrap_replicates: 1000
+ci_level: 0.95
+seed: 42

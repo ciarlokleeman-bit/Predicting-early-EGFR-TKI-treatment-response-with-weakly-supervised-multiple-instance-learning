@@ -1,0 +1,23 @@
+# Tissue segmentation and patch extraction from Aperio AT2 .svs files
+# scanned at 40x (0.25 um/px).
+
+slides_root: data/slides
+tiles_out: data/tiles
+thumbnails_out: data/thumbnails
+
+target_mpp: 0.5                 # 20x equivalent
+patch_size: 512                 # pixels at target_mpp -> 256 um x 256 um field
+stride: 512                     # non-overlapping grid
+min_tissue_fraction: 0.70
+
+tissue_mask:
+  thumbnail_mpp: 8.0            # resolution at which the mask is computed
+  method: otsu_saturation       # Otsu threshold on the HSV saturation channel
+  min_object_area_px: 64        # remove specks smaller than this in the thumbnail mask
+  fill_holes: true
+  closing_radius: 2
+
+tile_format: png
+jpeg_quality: 95
+num_workers: 8
+overwrite: false

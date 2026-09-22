@@ -1,0 +1,22 @@
+# UNI (Chen et al., Nat Med 2024), ViT-L/16 pretrained on 100k H&E slides.
+# Weights are gated on the Hugging Face hub (MahmoodLab/UNI). Download
+# pytorch_model.bin after accepting the licence and point `weights` to it.
+
+name: uni
+source: local_vit
+timm_name: vit_large_patch16_224
+weights: pretrained/uni/pytorch_model.bin
+feature_dim: 1024
+input_size: 224
+frozen: true
+vit_kwargs:
+  img_size: 224
+  patch_size: 16
+  init_values: 1.0e-5
+  num_classes: 0
+  dynamic_img_size: true
+normalize:
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
+batch_size: 64
+gradcam_layer: null

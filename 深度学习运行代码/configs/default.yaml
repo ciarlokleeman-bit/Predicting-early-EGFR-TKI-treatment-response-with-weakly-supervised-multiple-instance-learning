@@ -1,0 +1,74 @@
+# Base configuration shared by every run. Model / encoder / ablation files
+# extend this one through `_base_` and override individual keys.
+
+experiment_name: gated_attention_resnet50
+seed: 42
+output_root: runs
+device: auto            # auto | cuda | cpu
+
+paths:
+  manifest: data/manifests/cohort.csv
+  splits: data/splits
+  tiles: data/tiles_norm            # Macenko-normalised 512x512 tiles at 0.5 um/px
+  tiles_raw: data/tiles             # un-normalised tiles (used by the colour-normalisation ablation)
+  features: data/features           # <features>/<encoder>/<slide_id>.pt
+  stain_reference: data/stain_reference.npz
+
+data:
+  label_scheme: primary             # primary | pd_only | pd_plus_sd  (see hemil/data/clinical.py)
+  input: features                   # features: cached frozen-encoder embeddings
+                                    # tiles:    encode augmented tiles on the fly with the frozen encoder
+  encoder: resnet50
+  train_patches_per_bag: 100        # random sample per patient per epoch
+  eval_patches_per_bag: all         # every retained patch is scored at inference
+  augmentation: true                # flips, 90-degree rotations, colour jitter, random erasing
+  feature_views: 8                  # number of augmented views stored per tile when input == features
+  num_workers: 8
+  pin_memory: true
+
+cv:
+  n_outer_folds: 5
+  inner_val_size: 16                # patients held out of each 80-patient outer training partition
+  stratify: label
+  shuffle: true
+
+model:
+  name: gated_attention
+  in_dim: 2048                      # ResNet-50 penultimate features
+  attention_hidden: 256             # V, U in R^{256 x 2048}, w in R^{256}
+  attention_bias: false
+  mlp_hidden: 256                   # W1 in R^{256 x 2048}, W2 in R^{256 x 256}
+  dropout: 0.5                      # applied to the MLP output before the linear classifier
+  n_outputs: 1                      # single sigmoid logit for early poor response
+
+training:
+  epochs: 80
+  batch_size: 16                    # patients per iteration
+  optimizer: adamw
+  lr: 1.0e-4
+  weight_decay: 1.0e-4
+  betas: [0.9, 0.999]
+  scheduler:
+    name: cosine_warm_restarts
+    T_0: 20
+    T_mult: 1
+    eta_min: 1.0e-6
+  class_weighting: true             # w_R = N / (2 N_R), w_S = N / (2 N_S) from the training partition
+  early_stopping:
+    monitor: val_auc
+    mode: max
+    patience: 15
+    min_epochs: 5
+  amp: true
+  grad_clip: null
+  encode_chunk: 256                 # tiles per frozen-encoder forward when input == tiles
+  threshold_selection: youden       # operating point chosen on the inner validation set
+  save_attention: true
+  log_every: 1
+
+evaluation:
+  bootstrap_replicates: 1000
+  ci_level: 0.95
+  ece_bins: 10
+  high_specificity: 0.95
+  calibration_fit: linear           # linear | logistic recalibration of p on y

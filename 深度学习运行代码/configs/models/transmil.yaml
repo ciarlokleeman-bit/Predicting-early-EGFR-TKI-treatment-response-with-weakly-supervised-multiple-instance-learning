@@ -1,0 +1,19 @@
+_base_: ../default.yaml
+
+experiment_name: transmil_resnet50
+
+# TransMIL (Shao et al., NeurIPS 2021): Nystrom self-attention over patch
+# tokens with the pyramid position encoding generator (PPEG).
+model:
+  name: transmil
+  in_dim: 2048
+  embed_dim: 512
+  n_heads: 8
+  n_landmarks: 256
+  pinv_iterations: 6
+  attn_dropout: 0.1
+  n_outputs: 1
+
+training:
+  batch_size: 16
+  amp: true

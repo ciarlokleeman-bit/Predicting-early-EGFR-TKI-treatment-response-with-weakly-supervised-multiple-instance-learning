@@ -1,0 +1,11 @@
+name: densenet121
+source: torchvision
+weights: IMAGENET1K_V1
+feature_dim: 1024
+input_size: 512
+frozen: true
+normalize:
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
+batch_size: 96
+gradcam_layer: features.denseblock4

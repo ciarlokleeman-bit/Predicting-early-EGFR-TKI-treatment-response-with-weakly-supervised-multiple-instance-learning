@@ -1,0 +1,7 @@
+_base_: ../models/gated_attention.yaml
+
+# "- Data augmentation": only the identity view of each tile is used
+experiment_name: ablation_no_augmentation
+
+data:
+  augmentation: false

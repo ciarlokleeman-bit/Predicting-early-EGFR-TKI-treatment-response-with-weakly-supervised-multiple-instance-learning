@@ -1,0 +1,9 @@
+_base_: gated_attention.yaml
+
+experiment_name: gated_attention_vit_b16_in21k
+
+data:
+  encoder: vit_b16_in21k
+
+model:
+  in_dim: 768

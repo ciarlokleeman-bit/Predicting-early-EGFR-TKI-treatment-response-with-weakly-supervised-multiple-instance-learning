@@ -1,0 +1,11 @@
+_base_: ../models/gated_attention.yaml
+
+# "- Random patch sampling (use all)": every retained patch enters each training step
+experiment_name: ablation_all_patches
+
+data:
+  train_patches_per_bag: all
+
+training:
+  batch_size: 16
+  encode_chunk: 128

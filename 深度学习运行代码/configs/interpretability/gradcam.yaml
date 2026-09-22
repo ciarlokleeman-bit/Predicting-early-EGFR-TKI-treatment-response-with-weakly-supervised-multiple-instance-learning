@@ -1,0 +1,21 @@
+# Grad-CAM on the last convolutional block of the frozen encoder, mosaicked
+# onto the slide thumbnail and weighted by the learned attention.
+
+run_dir: runs/gated_attention_resnet50
+encoder: configs/encoders/resnet50.yaml
+tiles: data/tiles_norm
+slides_root: data/slides
+output_dir: results/gradcam
+
+patients: all                       # list of patient ids, or "all" for every out-of-fold patient
+top_k_patches: 20                   # patches receiving Grad-CAM within each slide
+target: slide_logit                 # scalar the gradients are taken from
+relu_on_cam: true
+thumbnail_mpp: 8.0
+overlay_alpha: 0.45
+colormap: jet
+save_arrays: true
+
+concordance:
+  spearman_top_k: 20                # Spearman(a_i, mean intra-patch CAM) on the 20 highest-attention patches
+  dice_decile: 0.10                 # Dice between the top attention decile and the top CAM decile

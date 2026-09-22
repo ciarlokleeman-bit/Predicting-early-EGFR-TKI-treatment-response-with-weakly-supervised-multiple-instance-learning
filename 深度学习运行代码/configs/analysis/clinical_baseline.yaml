@@ -1,0 +1,38 @@
+# Logistic clinical baselines and incremental value of the slide-level score.
+
+manifest: data/manifests/cohort.csv
+oof_predictions: runs/gated_attention_resnet50/oof_predictions.csv
+output_dir: results/clinical_baseline
+
+covariates:
+  ki67: ki67                        # labelling index, percent
+  tp53: tp53_status                 # 1 = altered (NGS call or p53 IHC >= 10 % nuclear staining)
+  stage: stage_binary               # 0 = I-II, 1 = III-IV
+  tki_generation: tki_generation    # first | third
+
+models:
+  - name: ki67_alone
+    terms: [ki67]
+  - name: tp53_alone
+    terms: [tp53]
+  - name: stage_alone
+    terms: [stage]
+  - name: clinical
+    terms: [ki67, tp53, stage]
+  - name: slide_score
+    terms: [score]
+  - name: slide_score_plus_clinical
+    terms: [score, ki67, tp53, stage]
+  - name: slide_score_plus_clinical_tki
+    terms: [score, ki67, tp53, stage, tki_generation]
+
+incremental:
+  reduced: clinical
+  full: slide_score_plus_clinical
+  likelihood_ratio_test: true
+  nri: category_free
+  score_unit: 0.10                  # odds ratio reported per 0.10 increase in the slide score
+
+bootstrap_replicates: 1000
+ci_level: 0.95
+seed: 42

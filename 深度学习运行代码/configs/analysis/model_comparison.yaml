@@ -1,0 +1,14 @@
+# Pairwise comparison of MIL aggregation strategies against gated attention.
+
+reference_run: runs/gated_attention_resnet50
+comparison_runs:
+  mean_pool: runs/mean_pool_resnet50
+  max_pool: runs/max_pool_resnet50
+  abmil: runs/abmil_resnet50
+  clam: runs/clam_sb_resnet50
+  transmil: runs/transmil_resnet50
+
+fold_test: wilcoxon_exact           # exact two-sided Wilcoxon signed-rank on the five fold-wise AUC differences
+multiple_comparison: holm           # Holm step-down over the planned comparisons
+pooled_sensitivity_test: delong     # uncorrected DeLong on pooled out-of-fold scores (reported, not used for inference)
+output: results/model_comparison.csv

@@ -1,0 +1,9 @@
+_base_: gated_attention.yaml
+
+experiment_name: gated_attention_densenet121
+
+data:
+  encoder: densenet121
+
+model:
+  in_dim: 1024

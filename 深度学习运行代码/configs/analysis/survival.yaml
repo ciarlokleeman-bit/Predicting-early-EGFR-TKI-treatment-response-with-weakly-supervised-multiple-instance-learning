@@ -1,0 +1,10 @@
+# Progression-free survival by the 12-week early-response label.
+
+manifest: data/manifests/cohort.csv
+output_dir: results/survival
+
+time_column: pfs_months
+event_column: pfs_event
+group_column: label                 # 1 = early poor response
+reference_group: 1                  # hazard ratio reported for favourable versus poor response
+ci_level: 0.95
